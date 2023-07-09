@@ -1,0 +1,11 @@
+{
+    "id": "hk2/hk2-plugins-updater",
+    "name": "HK2 Plugins Updater",
+    "namespace": "HK2\\PluginsUpdater\\",
+    "provider": "HK2\\PluginsUpdater\\Providers\\HK2PluginsUpdaterServiceProvider",
+    "author": "HK2",
+    "url": "https://github.com/mohamedhk2",
+    "version": "0.0.1",
+    "description": "Free Plugins Updater",
+    "image": null
+}

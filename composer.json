@@ -1,0 +1,12 @@
+{
+    "name": "mohamedhk2/hk2-updater",
+    "authors": [
+        {
+            "name": "mohamedhk2",
+            "email": "mohamedhk2@yahoo.fr"
+        }
+    ],
+    "require": {
+        "justinrainbow/json-schema": "^5.2"
+    }
+}

@@ -1,0 +1,210 @@
+[
+    {
+        "type": "plugin",
+        "id": "9931f110-f237-47cd-a616-f1b310da48a6",
+        "package_name": "archielite/url-shortener",
+        "name": "URL Shortener",
+        "url": "https://marketplace.botble.com/products/archielite/url-shortener",
+        "github_id": "archielite/botble-url-shortener"
+    },
+    {
+        "type": "plugin",
+        "id": "9931aa3f-c0db-41e6-a192-bae55c5ee0f6",
+        "package_name": "archielite/2fa",
+        "name": "Two-Factor Authentication",
+        "url": "https://marketplace.botble.com/products/archielite/2fa",
+        "github_id": "archielite/botble-2fa"
+    },
+    {
+        "type": "plugin",
+        "id": "992fd6f1-0624-46d5-88b9-362529cac6ef",
+        "package_name": "archielite/url-redirector",
+        "name": "URL Redirector",
+        "url": "https://marketplace.botble.com/products/archielite/url-redirector",
+        "github_id": "archielite/botble-url-redirector"
+    },
+    {
+        "type": "plugin",
+        "id": "99258465-512a-434a-afe9-27851b4fc856",
+        "package_name": "foxsolution/auto-content",
+        "name": "OpenAI Auto Content",
+        "url": "https://marketplace.botble.com/products/foxsolution/auto-content",
+        "github_id": "Fox-Solutions-Vn/auto-content"
+    },
+    {
+        "type": "plugin",
+        "id": "99156c07-94f6-493c-bc31-aa239734de20",
+        "package_name": "datlechin/botble-email-log",
+        "name": "Email Log",
+        "url": "https://marketplace.botble.com/products/datlechin/botble-email-log",
+        "github_id": "datlechin/botble-email-log"
+    },
+    {
+        "type": "plugin",
+        "id": "98fbd607-16f9-45d9-a0ca-7d54a39f4e4f",
+        "package_name": "archielite/ecommerce-notification",
+        "name": "Ecommerce Notification",
+        "url": "https://marketplace.botble.com/products/archielite/ecommerce-notification",
+        "github_id": "archielite/ecommerce-notification"
+    },
+    {
+        "type": "plugin",
+        "id": "98f551e2-2227-4ab4-a0ca-c9e392e8ba38",
+        "package_name": "archielite/notification-plus",
+        "name": "Notification Plus",
+        "url": "https://marketplace.botble.com/products/archielite/notification-plus",
+        "github_id": "archielite/notification-plus"
+    },
+    {
+        "type": "plugin",
+        "id": "98d708f8-52c5-4b0f-b8bf-3925f6f703bf",
+        "package_name": "vigstudio/vig-ai",
+        "name": "vig-ai",
+        "url": "https://marketplace.botble.com/products/vigstudio/vig-ai",
+        "github_id": "vigstudio/vig-ai"
+    },
+    {
+        "type": "plugin",
+        "id": "98bb4543-e1d1-48d4-828a-a93939e5866f",
+        "package_name": "hoabinhgroup/botble-sso-client",
+        "name": "botble-sso-client",
+        "url": "https://marketplace.botble.com/products/hoabinhgroup/botble-sso-client",
+        "github_id": "hoabinhgroup/botble-sso-client"
+    },
+    {
+        "type": "plugin",
+        "id": "98b4e043-3e80-4ef4-8c3c-6e2c72833f4f",
+        "package_name": "vigstudio/vig-auto-translations",
+        "name": "vig-auto-translations",
+        "url": "https://marketplace.botble.com/products/vigstudio/vig-auto-translations",
+        "github_id": "vigstudio/vig-auto-translations"
+    },
+    {
+        "type": "plugin",
+        "id": "98af5838-d05b-4695-9381-cf9a144700c2",
+        "package_name": "botble/edit-lock",
+        "name": "edit-lock",
+        "url": "https://marketplace.botble.com/products/botble/edit-lock",
+        "github_id": "botble/edit-lock"
+    },
+    {
+        "type": "plugin",
+        "id": "98867580-a596-4275-bc04-4851d5a9fe2d",
+        "package_name": "vigstudio/vig-theme-editor",
+        "name": "vig-theme-editor",
+        "url": "https://marketplace.botble.com/products/vigstudio/vig-theme-editor",
+        "github_id": "vigstudio/vig-theme-editor"
+    },
+    {
+        "type": "plugin",
+        "id": "98787d64-9c7c-4646-9da4-72016f8fe4e0",
+        "package_name": "botble/my-style",
+        "name": "my-style",
+        "url": "https://marketplace.botble.com/products/botble/my-style",
+        "github_id": "botble/my-style"
+    },
+    {
+        "type": "plugin",
+        "id": "98787cb9-b765-4432-91ec-39929eecfec1",
+        "package_name": "botble/code-highlighter",
+        "name": "code-highlighter",
+        "url": "https://marketplace.botble.com/products/botble/code-highlighter",
+        "github_id": "botble/code-highlighter"
+    },
+    {
+        "type": "plugin",
+        "id": "986ebdc5-c2fc-4b05-bfa8-a6488b42b34e",
+        "package_name": "vigstudio/vig-seo",
+        "name": "vig-seo",
+        "url": "https://marketplace.botble.com/products/vigstudio/vig-seo",
+        "github_id": "vigstudio/vig-seo"
+    },
+    {
+        "type": "plugin",
+        "id": "9816020a-a424-4cf8-bb0b-3a1576798a92",
+        "package_name": "sangnguyenplus/comment",
+        "name": "comment",
+        "url": "https://marketplace.botble.com/products/sangnguyenplus/comment",
+        "github_id": "sangnguyenplus/comment"
+    },
+    {
+        "type": "plugin",
+        "id": "98148224-62ae-425c-9deb-ec15be58485a",
+        "package_name": "datlechin/botble-trix-editor",
+        "name": "botble-trix-editor",
+        "url": "https://marketplace.botble.com/products/datlechin/botble-trix-editor",
+        "github_id": "datlechin/botble-trix-editor"
+    },
+    {
+        "type": "plugin",
+        "id": "9805c8b8-d1c9-4ba1-9c8b-2278ccb9fe4e",
+        "package_name": "sangnguyenplus/tag-cloud",
+        "name": "tag-cloud",
+        "url": "https://marketplace.botble.com/products/sangnguyenplus/tag-cloud",
+        "github_id": "sangnguyenplus/tag-cloud"
+    },
+    {
+        "type": "plugin",
+        "id": "97efb6bc-2d46-4792-a6a0-2067d8ded478",
+        "package_name": "nivianh/toc",
+        "name": "toc",
+        "url": "https://marketplace.botble.com/products/nivianh/toc",
+        "github_id": "nivianh/toc"
+    },
+    {
+        "type": "plugin",
+        "id": "97eb8d9f-2d92-4cda-a52f-05b4d83198ce",
+        "package_name": "vigstudio/vig-reactions",
+        "name": "vig-reactions",
+        "url": "https://marketplace.botble.com/products/vigstudio/vig-reactions",
+        "github_id": "vigstudio/vig-reactions"
+    },
+    {
+        "type": "plugin",
+        "id": "97e216e2-836b-455e-8827-e1d25d766c38",
+        "package_name": "datlechin/botble-sanctum-token",
+        "name": "botble-sanctum-token",
+        "url": "https://marketplace.botble.com/products/datlechin/botble-sanctum-token",
+        "github_id": "datlechin/botble-sanctum-token"
+    },
+    {
+        "type": "plugin",
+        "id": "97dffb27-15b3-4bd2-a9be-7923eda6c460",
+        "package_name": "botble/post-scheduler",
+        "name": "post-scheduler",
+        "url": "https://marketplace.botble.com/products/botble/post-scheduler",
+        "github_id": "botble/post-scheduler"
+    },
+    {
+        "type": "plugin",
+        "id": "97dffb17-debb-428c-8366-b313b44c526a",
+        "package_name": "botble/impersonate",
+        "name": "impersonate",
+        "url": "https://marketplace.botble.com/products/botble/impersonate",
+        "github_id": "botble/impersonate"
+    },
+    {
+        "type": "plugin",
+        "id": "97dffaff-9a94-4046-8e35-f99143d2cf0f",
+        "package_name": "botble/maintenance-mode",
+        "name": "maintenance-mode",
+        "url": "https://marketplace.botble.com/products/botble/maintenance-mode",
+        "github_id": "botble/maintenance-mode"
+    },
+    {
+        "type": "plugin",
+        "id": "97dffaed-757c-40e8-834c-a8421793dc4a",
+        "package_name": "botble/log-viewer",
+        "name": "log-viewer",
+        "url": "https://marketplace.botble.com/products/botble/log-viewer",
+        "github_id": "botble/log-viewer"
+    },
+    {
+        "type": "plugin",
+        "id": "97dffabb-ca2a-4d89-aee5-64cc9b8a78ed",
+        "package_name": "botble/wordpress-importer",
+        "name": "wordpress-importer",
+        "url": "https://marketplace.botble.com/products/botble/wordpress-importer",
+        "github_id": "botble/wordpress-importer"
+    }
+]

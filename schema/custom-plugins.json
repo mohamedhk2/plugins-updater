@@ -1,0 +1,43 @@
+{
+    "type": "array",
+    "items": {
+        "type": "array",
+        "properties": {
+            "type": {
+                "type": "string",
+                "enum": [
+                    "plugin"
+                ]
+            },
+            "id": {
+                "type": "string",
+                "format": "uuid"
+            },
+            "package_name": {
+                "type": "string"
+            },
+            "name": {
+                "type": "string"
+            },
+            "url": {
+                "type": "string",
+                "format": "uri"
+            },
+            "github_id": {
+                "type": "string"
+            },
+            "use_token": {
+                "type": "boolean",
+                "default": false
+            }
+        },
+        "required": [
+            "type",
+            "id",
+            "package_name",
+            "name",
+            "url",
+            "github_id"
+        ]
+    }
+}
