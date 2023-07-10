@@ -8,6 +8,7 @@ use Botble\PluginManagement\Services\PluginService;
 use Carbon\Carbon;
 use HK2\PluginsUpdater\Services\Hk2MarketplaceService;
 use HK2\PluginsUpdater\Traits\CustomPluginsTrait;
+use HK2\PluginsUpdater\Traits\PluginsTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -17,9 +18,8 @@ use Throwable;
 
 class HK2PluginsUpdaterController extends MarketplaceController
 {
-    use CustomPluginsTrait;
+    use PluginsTrait, CustomPluginsTrait;
 
-    protected ?Collection $plugins = null;
     protected ?Hk2MarketplaceService $myService = null;
 
     public function __construct(
@@ -43,7 +43,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
         if (!$plugin)
             return parent::install($id);
         #todo: check minimum_core_version
-        $use_token = $plugin['use_token'] ?? false;
+        $use_token = setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, $plugin['use_token'] ?? false);
         $name = Str::afterLast($plugin['package_name'], '/');
         $latest = $this->githubLatest($plugin['github_id'], $plugin['id'], $message, $use_token);
         if ($message)
@@ -67,17 +67,6 @@ class HK2PluginsUpdaterController extends MarketplaceController
                 'id' => $id,
             ],
         ]);
-    }
-
-    /**
-     * @return Collection
-     */
-    protected function plugins()
-    {
-        if ($this->plugins)
-            return $this->plugins;
-        $this->plugins = collect(json_decode(file_get_contents(dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . HK2_UPDATER_PLUGINS_FILE), true));
-        return $this->plugins;
     }
 
     /**
@@ -192,7 +181,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
             $plugin = $this->custom_plugins()->firstWhere('id', $id);
         if (!$plugin)
             return parent::update($id);
-        $use_token = $plugin['use_token'] ?? false;
+        $use_token = setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, $plugin['use_token'] ?? false);
         $name = Str::afterLast($plugin['package_name'], '/');
         $installed = $this->pluginService->getPluginInfo($name);
         if (!$installed)
@@ -255,7 +244,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
             if (!$plugin)
                 $plugin = $this->custom_plugins()->firstWhere('package_name', $package_name);
             if (!$plugin) continue;
-            $use_token = $plugin['use_token'] ?? false;
+            $use_token = setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, $plugin['use_token'] ?? false);
             $latest = $this->githubLatest($plugin['github_id'], $plugin['id'], use_token: $use_token);
             if (!$latest) continue;
             $latest_version = $latest['version'] ?? $latest['tag_name'];
@@ -279,7 +268,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
             $current_page = $request->get('page', 1);
             $github_token = setting(HK2_UPDATER_GITHUB_SETTING_NAME, '');
             $return = $this->custom_plugins()->map(function ($custom_plugin) use ($github_token) {
-                $use_token = $custom_plugin['use_token'] ?? false;
+                $use_token = setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, $custom_plugin['use_token'] ?? false);
                 $update = $this->githubLatest($custom_plugin['github_id'], $custom_plugin['id'], use_token: $use_token);
                 if (!$update) return null;
                 $image_url = "https://raw.githubusercontent.com/{$custom_plugin['github_id']}/{$update['tag_name']}/screenshot.png";

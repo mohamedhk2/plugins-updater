@@ -6,4 +6,5 @@ return [
     'label' => 'Github API Key',
     'placeholder' => 'ghp_......',
     'marketplace' => 'Enable Custom Plugins Marketplace',
+    'foce_token' => 'Always use token',
 ];

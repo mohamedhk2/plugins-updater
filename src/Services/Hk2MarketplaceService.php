@@ -4,12 +4,13 @@ namespace HK2\PluginsUpdater\Services;
 
 use Botble\PluginManagement\Services\MarketplaceService;
 use HK2\PluginsUpdater\Traits\CustomPluginsTrait;
+use HK2\PluginsUpdater\Traits\PluginsTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\File;
 
 class Hk2MarketplaceService extends MarketplaceService
 {
-    use CustomPluginsTrait;
+    use PluginsTrait, CustomPluginsTrait;
 
     /**
      * @param string $id
@@ -30,7 +31,7 @@ class Hk2MarketplaceService extends MarketplaceService
         if ($use_token) {
             if (empty($github_token = setting(HK2_UPDATER_GITHUB_SETTING_NAME, '')))
                 return false;
-            $custom_plugin = $this->custom_plugins()->firstWhere('id', $id);
+            $custom_plugin = $this->plugins()->merge($this->custom_plugins())->firstWhere('id', $id);
             if (!$custom_plugin)
                 throw new \Exception('Plugin not found');
             $github_id = $custom_plugin['github_id'];

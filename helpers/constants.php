@@ -4,6 +4,7 @@ const HK2_UPDATER_PLUGIN_NAME = 'plugins/hk2-plugins-updater';
 const HK2_UPDATER_LANG_NAME = 'hk2-updater';
 const HK2_UPDATER_GITHUB_SETTING_NAME = 'hk2_github_api_key';
 const HK2_UPDATER_CUSTOM_ENABLE_SETTING_NAME = 'hk2_updater_custom_plugins';
+const HK2_UPDATER_FORCE_TOKEN_SETTING_NAME = 'hk2_updater_force_token';
 const HK2_UPDATER_PLUGINS_FILE = 'Data/plugins.json';
 const HK2_UPDATER_CUSTOM_PLUGINS_FILE = 'app/marketplace/custom-plugins.json';
 const HK2_UPDATER_CUSTOM_PLUGINS_SCHEMA = 'schema/custom-plugins.json';

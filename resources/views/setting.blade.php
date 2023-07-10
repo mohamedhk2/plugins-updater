@@ -22,6 +22,11 @@
                 :label="hk2up_trans('marketplace')"
                 :value="setting(HK2_UPDATER_CUSTOM_ENABLE_SETTING_NAME, false)"
             />
+            <x-core-setting::checkbox
+                name="{{ HK2_UPDATER_FORCE_TOKEN_SETTING_NAME }}"
+                :label="hk2up_trans('foce_token')"
+                :value="setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, false)"
+            />
         </div>
     </div>
 </div>
