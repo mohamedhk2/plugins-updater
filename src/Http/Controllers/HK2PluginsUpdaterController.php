@@ -144,9 +144,9 @@ class HK2PluginsUpdaterController extends MarketplaceController
      */
     protected function updates()
     {
-        if (!file_exists(dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . HK2_UPDATER_UPDATE_FILE))
-            file_put_contents(dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . HK2_UPDATER_UPDATE_FILE, '[]');
-        return collect(json_decode(file_get_contents(dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . HK2_UPDATER_UPDATE_FILE), true));
+        if (!file_exists(storage_path(HK2_UPDATER_UPDATE_FILE)))
+            file_put_contents(storage_path(HK2_UPDATER_UPDATE_FILE), '[]');
+        return collect(json_decode(file_get_contents(storage_path(HK2_UPDATER_UPDATE_FILE)), true));
     }
 
     /**
@@ -175,7 +175,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
         } else {
             $updates->push($github_data);
         }
-        file_put_contents(dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . HK2_UPDATER_UPDATE_FILE, $updates->toJson(JSON_PRETTY_PRINT));
+        file_put_contents(storage_path(HK2_UPDATER_UPDATE_FILE), $updates->toJson(JSON_PRETTY_PRINT));
     }
 
     /**
@@ -270,17 +270,25 @@ class HK2PluginsUpdaterController extends MarketplaceController
         if (setting(HK2_UPDATER_CUSTOM_ENABLE_SETTING_NAME, false)) {
             $per_page = 12;
             $current_page = $request->get('page', 1);
-            $return = $this->custom_plugins()->map(function ($custom_plugin) {
+            $github_token = setting(HK2_UPDATER_GITHUB_SETTING_NAME, '');
+            $return = $this->custom_plugins()->map(function ($custom_plugin) use ($github_token) {
                 $use_token = $custom_plugin['use_token'] ?? false;
                 $update = $this->githubLatest($custom_plugin['github_id'], $custom_plugin['id'], use_token: $use_token);
                 if (!$update) return null;
+                $image_url = "https://raw.githubusercontent.com/{$custom_plugin['github_id']}/{$update['tag_name']}/screenshot.png";
+                if ($use_token) {
+                    $image = \Http::withHeaders($use_token ? [
+                        'Authorization' => "Bearer {$github_token}",
+                    ] : [])->get("https://raw.githubusercontent.com/{$custom_plugin['github_id']}/{$update['tag_name']}/screenshot.png");
+                    $image_url = 'data:image/png;base64,' . base64_encode($image->body());
+                }
                 return [
                     'author_name' => $update['author_name'],
                     'author_url' => $update['author_url'],
                     'content' => [],
                     'description' => $update['description'],
                     'downloads_count' => 0,
-                    'image_url' => "https://raw.githubusercontent.com/{$custom_plugin['github_id']}/{$update['tag_name']}/screenshot.png",
+                    'image_url' => $image_url,
                     'last_updated_at' => $update['published_at'],
                     'latest_version' => $update['version'] ?? $update['tag_name'],
                     'id' => $custom_plugin['id'],

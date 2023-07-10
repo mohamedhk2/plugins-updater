@@ -7,7 +7,7 @@ const HK2_UPDATER_CUSTOM_ENABLE_SETTING_NAME = 'hk2_updater_custom_plugins';
 const HK2_UPDATER_PLUGINS_FILE = 'data/plugins.json';
 const HK2_UPDATER_CUSTOM_PLUGINS_FILE = 'app/marketplace/custom-plugins.json';
 const HK2_UPDATER_CUSTOM_PLUGINS_SCHEMA = 'schema/custom-plugins.json';
-const HK2_UPDATER_UPDATE_FILE = 'data/updates.json';
+const HK2_UPDATER_UPDATE_FILE = 'app/marketplace/updates.json';
 
 const HK2_PLUGINS = [
     [
