@@ -17,7 +17,7 @@ trait CustomPluginsTrait
         if ($this->custom_plugins)
             return $this->custom_plugins;
         else $this->custom_plugins = collect();
-        if(!file_exists(storage_path(HK2_UPDATER_CUSTOM_PLUGINS_FILE)))
+        if (!file_exists(storage_path(HK2_UPDATER_CUSTOM_PLUGINS_FILE)))
             goto file_not_exists;
         $data = json_decode(file_get_contents(storage_path(HK2_UPDATER_CUSTOM_PLUGINS_FILE)), true);
         $validator = new Validator;
@@ -25,6 +25,7 @@ trait CustomPluginsTrait
         if ($validator->isValid())
             $this->custom_plugins = collect($data);
         file_not_exists:
-        return $this->custom_plugins->merge(HK2_PLUGINS);
+        $this->custom_plugins = $this->custom_plugins->merge(HK2_PLUGINS);
+        return $this->custom_plugins;
     }
 }

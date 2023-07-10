@@ -113,7 +113,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
                 'url' => null,
             ];
         } else $package_json = $req->json();
-        $this->setUpdateData($update = [
+        return $this->setUpdateData([
             'id' => $id,
             'github_id' => $github_id,
             'tag_name' => $latest['tag_name'],
@@ -126,7 +126,6 @@ class HK2PluginsUpdaterController extends MarketplaceController
             'description' => $package_json['description'],
             'url' => $package_json['url'] ?? $update['url'],
         ]);
-        return $update;
     }
 
     /**
@@ -159,7 +158,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
 
     /**
      * @param $github_data
-     * @return void
+     * @return array
      */
     protected function setUpdateData($github_data)
     {
@@ -173,9 +172,12 @@ class HK2PluginsUpdaterController extends MarketplaceController
             $exist['date'] = $this->verify_date();
             $updates->put($index, $exist);
         } else {
-            $updates->push($github_data);
+            $updates->push($exist = $github_data + [
+                    'date' => $this->verify_date()
+                ]);
         }
         file_put_contents(storage_path(HK2_UPDATER_UPDATE_FILE), $updates->toJson(JSON_PRETTY_PRINT));
+        return $exist;
     }
 
     /**
@@ -184,7 +186,6 @@ class HK2PluginsUpdaterController extends MarketplaceController
      */
     public function update(string $id): JsonResponse
     {
-
         $plugin = $this->plugins()->firstWhere('id', $id);
         if (!$plugin)
             $plugin = $this->custom_plugins()->firstWhere('id', $id);
@@ -249,13 +250,17 @@ class HK2PluginsUpdaterController extends MarketplaceController
         }
         foreach ($installedPlugins as $package_name => $package_version) {
             $plugin = $this->plugins()->firstWhere('package_name', $package_name);
+            if (!$plugin)
+                $plugin = $this->custom_plugins()->firstWhere('package_name', $package_name);
             if (!$plugin) continue;
-            $latest = $this->githubLatest($plugin['github_id'], $plugin['id']);
+            $use_token = $plugin['use_token'] ?? false;
+            $latest = $this->githubLatest($plugin['github_id'], $plugin['id'], use_token: $use_token);
             if (!$latest) continue;
-            version_compare($package_version, $latest['tag_name'], '<') && $resp['data'][] = [
+            $latest_version = $latest['version'] ?? $latest['tag_name'];
+            version_compare($package_version, $latest_version, '<') && $resp['data'][] = [
                 'id' => $plugin['id'],
                 'name' => $plugin['package_name'],
-                'version' => $latest['tag_name']
+                'version' => $latest_version
             ];
         }
         return response()->json($resp);
