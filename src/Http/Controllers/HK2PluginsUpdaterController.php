@@ -43,15 +43,16 @@ class HK2PluginsUpdaterController extends MarketplaceController
         if (!$plugin)
             return parent::install($id);
         #todo: check minimum_core_version
+        $use_token = $plugin['use_token'] ?? false;
         $name = Str::afterLast($plugin['package_name'], '/');
-        $latest = $this->githubLatest($plugin['github_id'], $plugin['id'], $message, $plugin['use_token'] ?? false);
+        $latest = $this->githubLatest($plugin['github_id'], $plugin['id'], $message, $use_token);
         if ($message)
             return response()->json([
                 'error' => true,
                 'message' => $message,
             ]);
         try {
-            $this->myService->beginInstall($id, 'plugin', $name, $latest['zipball_url']);
+            $this->myService->beginInstall($id, 'plugin', $name, $latest['zipball_url'], $use_token);
         } catch (Throwable $exception) {
             return response()->json([
                 'error' => true,
@@ -191,6 +192,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
             $plugin = $this->custom_plugins()->firstWhere('id', $id);
         if (!$plugin)
             return parent::update($id);
+        $use_token = $plugin['use_token'] ?? false;
         $name = Str::afterLast($plugin['package_name'], '/');
         $installed = $this->pluginService->getPluginInfo($name);
         if (!$installed)
@@ -198,7 +200,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
                 'success' => false,
                 'message' => trans('packages/plugin-management::plugin.plugin_not_exist'),
             ]);
-        $latest = $this->githubLatest($plugin['github_id'], $plugin['id'], $message, $plugin['use_token'] ?? false);
+        $latest = $this->githubLatest($plugin['github_id'], $plugin['id'], $message, $use_token);
         if ($message)
             return response()->json([
                 'error' => true,
@@ -206,7 +208,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
             ]);
         if (version_compare($installed['version'], $latest['tag_name'], '<')) {
             try {
-                $this->myService->beginInstall($id, 'plugin', $name, $latest['zipball_url']);
+                $this->myService->beginInstall($id, 'plugin', $name, $latest['zipball_url'], $use_token);
             } catch (Throwable $exception) {
                 return response()->json([
                     'error' => true,
