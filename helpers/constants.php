@@ -3,12 +3,16 @@
 const HK2_UPDATER_PLUGIN_NAME = 'plugins/hk2-plugins-updater';
 const HK2_UPDATER_LANG_NAME = 'hk2-updater';
 const HK2_UPDATER_GITHUB_SETTING_NAME = 'hk2_github_api_key';
-const HK2_UPDATER_CUSTOM_ENABLE_SETTING_NAME = 'hk2_updater_custom_plugins';
 const HK2_UPDATER_FORCE_TOKEN_SETTING_NAME = 'hk2_updater_force_token';
 const HK2_UPDATER_PLUGINS_FILE = 'Data/plugins.json';
-const HK2_UPDATER_CUSTOM_PLUGINS_FILE = 'app/marketplace/custom-plugins.json';
+const HK2_UPDATER_UPDATE_DIR = 'app/marketplace';
+const HK2_UPDATER_CUSTOM_PLUGINS_FILE = HK2_UPDATER_UPDATE_DIR . DIRECTORY_SEPARATOR . 'custom-plugins.json';
 const HK2_UPDATER_CUSTOM_PLUGINS_SCHEMA = 'schema/custom-plugins.json';
-const HK2_UPDATER_UPDATE_FILE = 'app/marketplace/updates.json';
+const HK2_UPDATER_UPDATE_FILE = HK2_UPDATER_UPDATE_DIR . DIRECTORY_SEPARATOR . 'updates.json';
+const HK2_UPDATER_MARKETPLACE_TYPE_SETTING_NAME = 'hk2_updater_marketplace_type';
+const HK2_UPDATER_DEFAULT_MARKETPLACE = 'default';
+const HK2_UPDATER_CUSTOM_MARKETPLACE = 'custom';
+const HK2_UPDATER_OVERRIDES_MARKETPLACE = 'overrides';
 
 const HK2_PLUGINS = [
     [

@@ -18,14 +18,19 @@
                 helper-text="get it from: <a href=https://github.com/settings/tokens target=_blank>https://github.com/settings/tokens</a>"
             />
             <x-core-setting::checkbox
-                name="{{ HK2_UPDATER_CUSTOM_ENABLE_SETTING_NAME }}"
-                :label="hk2up_trans('marketplace')"
-                :value="setting(HK2_UPDATER_CUSTOM_ENABLE_SETTING_NAME, false)"
-            />
-            <x-core-setting::checkbox
                 name="{{ HK2_UPDATER_FORCE_TOKEN_SETTING_NAME }}"
                 :label="hk2up_trans('foce_token')"
                 :value="setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, false)"
+            />
+            <x-core-setting::radio
+                :name="HK2_UPDATER_MARKETPLACE_TYPE_SETTING_NAME"
+                :label="hk2up_trans('marketplace')"
+                :value="setting(HK2_UPDATER_MARKETPLACE_TYPE_SETTING_NAME, HK2_UPDATER_DEFAULT_MARKETPLACE)"
+                :options="[
+                        HK2_UPDATER_DEFAULT_MARKETPLACE => hk2up_trans(HK2_UPDATER_DEFAULT_MARKETPLACE),
+                        HK2_UPDATER_CUSTOM_MARKETPLACE => hk2up_trans(HK2_UPDATER_CUSTOM_MARKETPLACE),
+                        HK2_UPDATER_OVERRIDES_MARKETPLACE => hk2up_trans(HK2_UPDATER_OVERRIDES_MARKETPLACE),
+                    ]"
             />
         </div>
     </div>

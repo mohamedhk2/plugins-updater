@@ -2,6 +2,7 @@
 
 namespace HK2\PluginsUpdater\Http\Controllers;
 
+use Botble\Base\Http\Responses\BaseHttpResponse;
 use Botble\PluginManagement\Http\Controllers\MarketplaceController;
 use Botble\PluginManagement\Services\MarketplaceService;
 use Botble\PluginManagement\Services\PluginService;
@@ -9,14 +10,17 @@ use Carbon\Carbon;
 use HK2\PluginsUpdater\Services\Hk2MarketplaceService;
 use HK2\PluginsUpdater\Traits\CustomPluginsTrait;
 use HK2\PluginsUpdater\Traits\PluginsTrait;
+use Http;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Throwable;
 
-class HK2PluginsUpdaterController extends MarketplaceController
+class HK2PluginsUpdaterController
 {
     use PluginsTrait, CustomPluginsTrait;
 
@@ -27,7 +31,6 @@ class HK2PluginsUpdaterController extends MarketplaceController
         protected PluginService      $pluginService,
     )
     {
-        parent::__construct($marketplaceService, $pluginService);
         $this->myService = new Hk2MarketplaceService;
     }
 
@@ -41,7 +44,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
         if (!$plugin)
             $plugin = $this->custom_plugins()->firstWhere('id', $id);
         if (!$plugin)
-            return parent::install($id);
+            return app(MarketplaceController::class)->install($id);
         #todo: check minimum_core_version
         $use_token = setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, $plugin['use_token'] ?? false);
         $name = Str::afterLast($plugin['package_name'], '/');
@@ -84,17 +87,17 @@ class HK2PluginsUpdaterController extends MarketplaceController
             if (empty($github_token = setting(HK2_UPDATER_GITHUB_SETTING_NAME, '')))
                 return null;
         }
-        $req = \Http::withHeaders($use_token ? [
-            'Authorization' => "Bearer {$github_token}",
-        ] : [])->get("https://api.github.com/repos/{$github_id}/releases/latest");
+        $req = Http::withHeaders($use_token ? [
+            'Authorization' => "Bearer $github_token",
+        ] : [])->get("https://api.github.com/repos/$github_id/releases/latest");
         if ($req->failed()) {
             $message = $latest['message'] ?? null;
             return null;
         }
         $latest = $req->json();
-        $req = \Http::withHeaders($use_token ? [
-            'Authorization' => "Bearer {$github_token}",
-        ] : [])->get("https://raw.githubusercontent.com/{$github_id}/{$latest['tag_name']}/plugin.json");
+        $req = Http::withHeaders($use_token ? [
+            'Authorization' => "Bearer $github_token",
+        ] : [])->get("https://raw.githubusercontent.com/$github_id/{$latest['tag_name']}/plugin.json");
         if ($req->failed()) {
             $package_json = [
                 'author' => $latest['author']['login'],
@@ -103,6 +106,16 @@ class HK2PluginsUpdaterController extends MarketplaceController
                 'url' => null,
             ];
         } else $package_json = $req->json();
+        $image_url = "https://raw.githubusercontent.com/$github_id/{$latest['tag_name']}/screenshot.png";
+        $github_opengraph = "https://opengraph.githubassets.com/i/$github_id";
+        if ($use_token) {
+            $image = Http::withHeaders([
+                'Authorization' => "Bearer $github_token",
+            ])->get("https://raw.githubusercontent.com/$github_id/{$latest['tag_name']}/screenshot.png");
+            $image_url = $image->failed() ? $github_opengraph : 'data:image/png;base64,' . base64_encode($image->body());
+        } else {
+            Http::head($image_url)->ok() || $image_url = $github_opengraph;
+        }
         return $this->setUpdateData([
             'id' => $id,
             'github_id' => $github_id,
@@ -115,6 +128,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
             'published_at' => $latest['published_at'],
             'description' => $package_json['description'],
             'url' => $package_json['url'] ?? $update['url'],
+            'cover' => $image_url,
         ]);
     }
 
@@ -133,8 +147,10 @@ class HK2PluginsUpdaterController extends MarketplaceController
      */
     protected function updates()
     {
-        if (!file_exists(storage_path(HK2_UPDATER_UPDATE_FILE)))
+        if (!file_exists(storage_path(HK2_UPDATER_UPDATE_FILE))) {
+            mkdir(storage_path(HK2_UPDATER_UPDATE_DIR), recursive: true);
             file_put_contents(storage_path(HK2_UPDATER_UPDATE_FILE), '[]');
+        }
         return collect(json_decode(file_get_contents(storage_path(HK2_UPDATER_UPDATE_FILE)), true));
     }
 
@@ -143,7 +159,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
      */
     protected function verify_date()
     {
-        return Carbon::now()->format('Y-m-d H:');
+        return Carbon::now()->format('Y-m-d');
     }
 
     /**
@@ -180,7 +196,7 @@ class HK2PluginsUpdaterController extends MarketplaceController
         if (!$plugin)
             $plugin = $this->custom_plugins()->firstWhere('id', $id);
         if (!$plugin)
-            return parent::update($id);
+            return app(MarketplaceController::class)->update($id);
         $use_token = setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, $plugin['use_token'] ?? false);
         $name = Str::afterLast($plugin['package_name'], '/');
         $installed = $this->pluginService->getPluginInfo($name);
@@ -259,62 +275,72 @@ class HK2PluginsUpdaterController extends MarketplaceController
 
     /**
      * @param Request $request
+     * @param BaseHttpResponse $httpResponse
      * @return array|JsonResponse|mixed
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
      */
-    public function list(Request $request)
+    public function list(Request $request, BaseHttpResponse $httpResponse)
     {
-        if (setting(HK2_UPDATER_CUSTOM_ENABLE_SETTING_NAME, false)) {
-            $per_page = 12;
-            $current_page = $request->get('page', 1);
-            $github_token = setting(HK2_UPDATER_GITHUB_SETTING_NAME, '');
-            $return = $this->custom_plugins()->map(function ($custom_plugin) use ($github_token) {
-                $use_token = setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, $custom_plugin['use_token'] ?? false);
-                $update = $this->githubLatest($custom_plugin['github_id'], $custom_plugin['id'], use_token: $use_token);
-                if (!$update) return null;
-                $image_url = "https://raw.githubusercontent.com/{$custom_plugin['github_id']}/{$update['tag_name']}/screenshot.png";
-                if ($use_token) {
-                    $image = \Http::withHeaders($use_token ? [
-                        'Authorization' => "Bearer {$github_token}",
-                    ] : [])->get("https://raw.githubusercontent.com/{$custom_plugin['github_id']}/{$update['tag_name']}/screenshot.png");
-                    $image_url = 'data:image/png;base64,' . base64_encode($image->body());
-                }
-                return [
-                    'author_name' => $update['author_name'],
-                    'author_url' => $update['author_url'],
-                    'content' => [],
-                    'description' => $update['description'],
-                    'downloads_count' => 0,
-                    'image_url' => $image_url,
-                    'last_updated_at' => $update['published_at'],
-                    'latest_version' => $update['version'] ?? $update['tag_name'],
-                    'id' => $custom_plugin['id'],
-                    'license' => 'MIT',
-                    'license_url' => 'https://opensource.org/licenses/MIT',
-                    'minimum_core_version' => null,#"6.5.5",
-                    'name' => $custom_plugin['name'],
-                    'package_name' => $custom_plugin['package_name'],
-                    'ratings_avg' => 0,
-                    'ratings_count' => 0,
-                    'screenshots' => null,
-                    'type' => $custom_plugin['type'],
-                    'url' => $update['url'],
-                ];
-            })->filter()->hk2up_paginate($per_page, page: $current_page);
-            /**
-             * @var LengthAwarePaginator $return
-             */
-            $paginate = $return->toArray();
-            $links = $paginate['links'];
-            $data = $paginate['data'];
-            unset($paginate['links'], $paginate['data']);
-            return collect([
-                'data' => $data,
-                'links' => $links,
-                'message' => null,
-                'meta' => $paginate,
-                'success' => true,
-            ]);
-        }
-        return parent::list($request);
+        return match (setting(HK2_UPDATER_MARKETPLACE_TYPE_SETTING_NAME, HK2_UPDATER_DEFAULT_MARKETPLACE)) {
+            HK2_UPDATER_CUSTOM_MARKETPLACE => $this->marketplace($this->custom_plugins()),
+            HK2_UPDATER_OVERRIDES_MARKETPLACE => $this->marketplace($this->plugins()->merge(HK2_PLUGINS)),
+            default => app(MarketplaceController::class)->list($request, $httpResponse),
+        };
+    }
+
+    /**
+     * @param Collection $plugins
+     * @return Collection
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
+    protected function marketplace(Collection $plugins)
+    {
+        $per_page = 12;
+        $current_page = request()->get('page', 1);
+        $last_page = ceil($plugins->count() / $per_page);
+        if ($current_page > $last_page)
+            $current_page = $last_page;
+        $return = $plugins->map(function ($custom_plugin) {
+            $use_token = setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, $custom_plugin['use_token'] ?? false);
+            $update = $this->githubLatest($custom_plugin['github_id'], $custom_plugin['id'], use_token: $use_token);
+            if (!$update) return null;
+            return [
+                'author_name' => $update['author_name'],
+                'author_url' => $update['author_url'],
+                'content' => [],
+                'description' => $update['description'],
+                'downloads_count' => 0,
+                'image_url' => $update['cover'],
+                'last_updated_at' => $update['published_at'],
+                'latest_version' => $update['version'] ?? $update['tag_name'],
+                'id' => $custom_plugin['id'],
+                'license' => 'MIT',
+                'license_url' => 'https://opensource.org/licenses/MIT',
+                'minimum_core_version' => null,#"6.5.5",
+                'name' => $custom_plugin['name'],
+                'package_name' => $custom_plugin['package_name'],
+                'ratings_avg' => 0,
+                'ratings_count' => 0,
+                'screenshots' => null,
+                'type' => $custom_plugin['type'],
+                'url' => $update['url'],
+            ];
+        })->filter()->hk2up_paginate($per_page, page: $current_page);
+        /**
+         * @var LengthAwarePaginator $return
+         */
+        $paginate = $return->toArray();
+        $links = $paginate['links'];
+        $data = $paginate['data'];
+        unset($paginate['links'], $paginate['data']);
+        return collect([
+            'data' => $data,
+            'links' => $links,
+            'message' => null,
+            'meta' => $paginate,
+            'success' => true,
+        ]);
     }
 }

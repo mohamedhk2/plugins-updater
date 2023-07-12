@@ -5,6 +5,9 @@ return [
     'description' => 'Github key to install/update private plugins',
     'label' => 'Github API Key',
     'placeholder' => 'ghp_......',
-    'marketplace' => 'Enable Custom Plugins Marketplace',
-    'foce_token' => 'Always use token',
+    'marketplace' => 'Marketplace',
+    'foce_token' => 'Always use token (helpful to skip GitHub API rate limit)',
+    'default' => 'Default',
+    'custom' => 'Custom',
+    'overrides' => 'Overrides',
 ];
