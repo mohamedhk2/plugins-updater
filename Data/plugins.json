@@ -1,6 +1,14 @@
 [
     {
         "type": "plugin",
+        "id": "99a0d47a-0b9b-4fb4-a915-0d4068d7d1ac",
+        "package_name": "archielite/log-viewer-plus",
+        "name": "Log Viewer Plus",
+        "url": "https://marketplace.botble.com/products/archielite/log-viewer-plus",
+        "github_id": "archielite/log-viewer-plus"
+    },
+    {
+        "type": "plugin",
         "id": "9931f110-f237-47cd-a616-f1b310da48a6",
         "package_name": "archielite/url-shortener",
         "name": "URL Shortener",
