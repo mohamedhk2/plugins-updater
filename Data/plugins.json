@@ -1,6 +1,14 @@
 [
     {
         "type": "plugin",
+        "id": "99dca133-8501-4e8b-97bb-29c82dd747a8",
+        "package_name": "archielite/ip-blocker",
+        "name": "IP Blocker",
+        "url": "https://marketplace.botble.com/products/archielite/botble-ip-blocker",
+        "github_id": "archielite/botble-ip-blocker"
+    },
+    {
+        "type": "plugin",
         "id": "99a0d47a-0b9b-4fb4-a915-0d4068d7d1ac",
         "package_name": "archielite/log-viewer-plus",
         "name": "Log Viewer Plus",
