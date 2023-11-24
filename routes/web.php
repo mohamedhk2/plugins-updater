@@ -13,7 +13,7 @@ Route::group(['namespace' => 'Botble\PluginManagement\Http\Controllers', 'middle
                     'uses' => '\\' . HK2PluginsUpdaterController::class . '@install',
                     'middleware' => 'preventDemo',
                 ]);
-                Route::post('{id}/update', [
+                Route::post('{id}/update/{name?}', [
                     'as' => 'plugins.marketplace.ajax.update',
                     'uses' => '\\' . HK2PluginsUpdaterController::class . '@update',
                     'middleware' => 'preventDemo',
