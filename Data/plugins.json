@@ -222,5 +222,29 @@
         "name": "wordpress-importer",
         "url": "https://marketplace.botble.com/products/botble/wordpress-importer",
         "github_id": "botble/wordpress-importer"
+    },
+    {
+        "type": "plugin",
+        "id": "9b246f66-07bf-4c3c-8b04-1f2be5301ba0",
+        "package_name": "skillcraft-io/sc-referral",
+        "name": "Skillcraft Referrals",
+        "url": "https://marketplace.botble.com/products/skillcraft-io/sc-referral",
+        "github_id": "skillcraft-io/sc-referral"
+    },
+    {
+        "type": "plugin",
+        "id": "9b1faf7f-6278-4725-883a-d23224f1403e",
+        "package_name": "skillcraft-io/sc-contact-manager",
+        "name": "Skillcraft Contact Manager",
+        "url": "https://marketplace.botble.com/products/skillcraft-io/sc-contact-manager",
+        "github_id": "skillcraft-io/sc-contact-manager"
+    },
+    {
+        "type": "plugin",
+        "id": "9ac6760d-7041-45f1-a92a-4cbc8f07c9f7",
+        "package_name": "datlechin/whatsapp-floating-button",
+        "name": "WhatsApp Floating Button",
+        "url": "https://marketplace.botble.com/products/datlechin/whatsapp-floating-button",
+        "github_id": "datlechin/botble-whatsapp-floating-button"
     }
 ]

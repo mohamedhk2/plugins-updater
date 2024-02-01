@@ -25,7 +25,7 @@ trait CustomPluginsTrait
         if ($validator->isValid())
             $this->custom_plugins = collect($data);
         file_not_exists:
-        $this->custom_plugins = $this->custom_plugins->merge(HK2_PLUGINS);
+        $this->custom_plugins->push(...HK2_PLUGINS);
         return $this->custom_plugins;
     }
 }
