@@ -266,8 +266,7 @@ class HK2PluginsUpdaterController
             $use_token = setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, $plugin['use_token'] ?? false);
             $latest = $this->githubLatest($plugin['github_id'], $plugin['id'], use_token: $use_token);
             if (!$latest) continue;
-            $latest_version = $latest['version'] ?? $latest['tag_name'];
-            $latest_version = str_replace('v', null, $latest_version);
+            $latest_version = str_replace('v', null, $latest['version'] ?? $latest['tag_name']);
             version_compare($package_version, $latest_version, '<') && $resp['data'][] = [
                 'id' => $plugin['id'],
                 'name' => $plugin['package_name'],
@@ -318,7 +317,7 @@ class HK2PluginsUpdaterController
                 'downloads_count' => 0,
                 'image_url' => $update['cover'],
                 'last_updated_at' => $update['published_at'],
-                'latest_version' => $update['version'] ?? $update['tag_name'],
+                'latest_version' => str_replace('v', null, $update['version'] ?? $update['tag_name']),
                 'id' => $custom_plugin['id'],
                 'license' => 'MIT',
                 'license_url' => 'https://opensource.org/licenses/MIT',
