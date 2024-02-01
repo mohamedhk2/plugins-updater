@@ -90,11 +90,11 @@ class HK2PluginsUpdaterController
         $req = Http::withHeaders($use_token ? [
             'Authorization' => "Bearer $github_token",
         ] : [])->get("https://api.github.com/repos/$github_id/releases/latest");
+        $latest = $req->json();
         if ($req->failed()) {
             $message = $latest['message'] ?? null;
             return null;
         }
-        $latest = $req->json();
         $req = Http::withHeaders($use_token ? [
             'Authorization' => "Bearer $github_token",
         ] : [])->get("https://raw.githubusercontent.com/$github_id/{$latest['tag_name']}/plugin.json");
@@ -267,6 +267,7 @@ class HK2PluginsUpdaterController
             $latest = $this->githubLatest($plugin['github_id'], $plugin['id'], use_token: $use_token);
             if (!$latest) continue;
             $latest_version = $latest['version'] ?? $latest['tag_name'];
+            $latest_version = str_replace('v', null, $latest_version);
             version_compare($package_version, $latest_version, '<') && $resp['data'][] = [
                 'id' => $plugin['id'],
                 'name' => $plugin['package_name'],
