@@ -20,7 +20,8 @@
             <x-core-setting::checkbox
                 name="{{ HK2_UPDATER_FORCE_TOKEN_SETTING_NAME }}"
                 :label="hk2up_trans('foce_token')"
-                :value="setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, false)"
+                :value=1
+                :checked="setting(HK2_UPDATER_FORCE_TOKEN_SETTING_NAME, false)"
             />
             <x-core-setting::radio
                 :name="HK2_UPDATER_MARKETPLACE_TYPE_SETTING_NAME"

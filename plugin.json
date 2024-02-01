@@ -5,7 +5,7 @@
     "provider": "HK2\\PluginsUpdater\\Providers\\HK2PluginsUpdaterServiceProvider",
     "author": "mohamedhk2",
     "url": "https://github.com/mohamedhk2/plugins-updater",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Free Plugins Updater",
     "image": null
 }
