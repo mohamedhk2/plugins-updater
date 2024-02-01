@@ -148,7 +148,10 @@ class HK2PluginsUpdaterController
     protected function updates()
     {
         if (!file_exists(storage_path(HK2_UPDATER_UPDATE_FILE))) {
-            mkdir(storage_path(HK2_UPDATER_UPDATE_DIR), recursive: true);
+            try {
+                mkdir(storage_path(HK2_UPDATER_UPDATE_DIR), recursive: true);
+            } catch (\Exception) {
+            }
             file_put_contents(storage_path(HK2_UPDATER_UPDATE_FILE), '[]');
         }
         return collect(json_decode(file_get_contents(storage_path(HK2_UPDATER_UPDATE_FILE)), true));
